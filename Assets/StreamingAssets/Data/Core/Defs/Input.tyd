@@ -1,0 +1,71 @@
+Profiles
+{
+    AlwaysEnabled
+    {
+        name            AlwaysEnabled
+        enabled         true
+        alwaysEnabled   true
+        Axes
+        [
+            {
+                name                LogTestMessage
+                label               logTestMessage
+                description         Logs a test message to the debug console to verify that the input system works.
+                priority            10
+                keyCodes            [[LeftControl; LeftShift; L]]
+            }
+            {
+                name                EarlyLogTestMessage
+                label               earlyLogTestMessage
+                description         Logs a test message to the debug console early
+                priority            12
+                keyCodes            [[LeftControl; LeftShift; L]]
+            }
+            {
+                name                ToggleConsole
+                label               toggleConsole
+                description         Opens the developer console if it is closed and closes it if it is open.
+                priority            10
+                keyCodes            [[F3]; [LeftControl; C]]
+            }
+            {
+                name                RemakeFloor
+                label               remakeFloor
+                description         Remakes the floor.
+                priority            10
+                keyCodes            [[LeftControl; R]]
+            }
+        ]
+    }
+    Menu
+    {
+        name            Menu
+        enabled         true    #you probably start the game in a menu
+        Axes
+        [
+            {
+                name                CloseMenuWindow
+                label               closeMenuWindow
+                description         Closes the top-level-most'v'd'st menu window.
+                priority            10
+                keyCodes            [[Escape]]
+            }
+        ]
+    }
+    Console
+    {
+        name        Console
+        enabled     false
+        Axes
+        [
+            {
+                name            EnterCommand
+                label           enterCommand
+                description     Enters a command.
+                priority        100
+                keyCodes        [[Return]]
+            }
+        ]
+    }
+
+}

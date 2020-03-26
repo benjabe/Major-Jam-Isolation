@@ -1,0 +1,45 @@
+//mock dialogue markup language
+[gameStart]
+#You
+...
+...
+Where am I?
+[wakeUp]
+(!)
+Wha-
+What the hell happened?
+//Player gains control
+//Player inspects things in room)
+//Camera pans over the ruined city
+[leaveRoomFirstTime]
+What the heckers
+//Player notices a skeleton on the ground
+[Player interacts with skeleton]
+Wha-
+A skeleton?
+- That must mean I've been out for a while.
+- ...
+[The skeleton turns around]
+(!)
+#Skeleton
+What the hell, man?!
+You're disturbing my beaty sleep!
+You don't get clean white bones like this by pulling all-nighters.
+#You
+- ;:o
+- You... you're talking?
+#Skeleton And so are you buddy! You surprised you're not the only undead around?
+#You No... this can't be happening...
+#Skeleton A late bloomer, eh? Haven't you looked at your hands until now?
+#You You're... you're right... That... does seem like a minor plot hole.
+#Skeleton ... Sure. I guess. Look, since you're aliv- er, well, you know, awake and all, could you do me a favour?
+{skeletonFavourResponse}
+#You {=yes} -Sure.
+#You {=no} -No.
+#You {=maybe} -Depends.
+#Skeleton Great. You see. You know how I talked about needing beaty sleep? How it makes my bones all nice?
+{skeletonFavourResponse}
+{no} #You -I said no.
+{default} #You -Go on.
+#Skeleton Well, that wasn't entirely true. Or it's not the whole truth, rather. You see... I'm... Kind of all out of milk.
+# {no} #You -I said no

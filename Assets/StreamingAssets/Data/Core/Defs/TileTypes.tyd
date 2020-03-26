@@ -1,0 +1,16 @@
+Wall
+{
+    traversable     false
+}
+Floor
+{
+    traversable     true
+}
+Entry
+{
+    traversable     true
+}
+Exit
+{
+    traversable     true
+}
