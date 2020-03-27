@@ -8,6 +8,7 @@ public class Floor : MonoBehaviour
     public static Floor CurrentFloor { get; private set; }
     public Tile Entry { get; private set; }
     private Dictionary<Vector2Int, Tile> _tiles = new Dictionary<Vector2Int, Tile>();
+    private List<Character> _characters = new List<Character>();
 
     private void OnDestroy()
     {
@@ -36,11 +37,20 @@ public class Floor : MonoBehaviour
         if (type.Name == "Entry") Entry = go.GetComponent<Tile>();
     }
 
+    public void AddCharacter(Character character)
+    {
+        _characters.Add(character);
+    }
+
     public void Clear()
     {
         foreach (var tile in _tiles.Values)
         {
             DestroyImmediate(tile.gameObject);
+        }
+        foreach (var character in _characters)
+        {
+            DestroyImmediate(character.gameObject);
         }
         _tiles = new Dictionary<Vector2Int, Tile>();
     }

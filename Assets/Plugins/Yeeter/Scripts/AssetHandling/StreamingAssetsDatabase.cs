@@ -15,7 +15,7 @@ namespace Yeeter
     [Preserve, MoonSharpUserData, MoonSharpAlias("Assets")]
     public class StreamingAssetsDatabase
     {
-        private static readonly string _defaultCompanyName = "Official";    
+        private static readonly string _defaultCompanyName = "Official";
 
         private static Module[] _modules;
         private static Dictionary<string, Texture2D> _textures = new Dictionary<string, Texture2D>();
@@ -408,6 +408,40 @@ namespace Yeeter
             }
             InGameDebug.Log("Scripts loaded.");
         }
+        public static void LoadScriptsFromDirectory(string directory)
+        {
+            InGameDebug.Log("Loading scripts...");
+            Script.DefaultOptions.ScriptLoader = new YeeterScriptLoader();
+            var folders = new List<string>() { directory };
+            folders.AddRange(GetAllSubDirectories(directory));
+            foreach (var folder in folders)
+            {
+                InGameDebug.Log("\tSearching '" + folder + "'...");
+                foreach (var file in Directory.GetFiles(folder))
+                {
+                    InGameDebug.Log("\tFile found: '" + file + "'.");
+                    if (Path.GetExtension(file) == ".lua")
+                    {
+                        var pathRelativeToScriptsFolder =
+                            file
+                            .Replace(".lua", "")
+                            .Remove(0, directory.Length + 1);
+                        var key =
+                            pathRelativeToScriptsFolder
+                            .Replace('\\', '.')
+                            .Replace('/', '.');
+                        InGameDebug.Log(
+                            "\t\t<color=green>Script loaded: '" + key + "' (no module).</color>");
+                        YeeterScriptLoader.AssetDatabaseToPath[key] = file;
+                    }
+                    else
+                    {
+                        InGameDebug.Log("\t\tInvalid extension: '" + Path.GetExtension(file) + "'. Skipping.");
+                    }
+                }
+            }
+            InGameDebug.Log("Scripts loaded.");
+        }
         public static bool LoadSoundsFromActiveModules()
         {
             InGameDebug.Log("Loading sounds...");
@@ -606,6 +640,118 @@ namespace Yeeter
                         {
                             InGameDebug.Log("\t\tInvalid extension: '" + Path.GetExtension(file) + "'. Skipping.");
                         }
+                    }
+                }
+            }
+            // Add all nodes to inheritance.
+            var docs = new Dictionary<string, TydDocument>();
+            Inheritance.Initialize();
+            foreach (var pair in mergedFiles)
+            {
+                var nodes = TydFromText.Parse(pair.Value).ToList();
+                var doc = new TydDocument(nodes);
+                AddNodeToInheritance(doc);
+                docs[pair.Key] = doc;
+            }
+            Inheritance.ResolveAll();
+
+            // Now that we've applied inheritance we can load the node's defs and have stuff work.
+            foreach (var pair in docs)
+            {
+                AddNodeToAssetDatabase(pair.Key, pair.Value);
+            }
+
+            InGameDebug.Log("Defs loaded.");
+        }
+        public static void LoadDefsFromDirectory(string directory)
+        {
+            // Visits a node to add it to the defs dictionary.
+            void AddNodeToAssetDatabase(string parentKey, TydNode node, int index = 0)
+            {
+                if (node == null) return;
+
+                // Add self.
+                string nodeKey = parentKey;
+                // TydDocuments should have the same key as their folder. Otherwise we get
+                // "Some.Folder.File.0.NodeInFile" instead of "Some.Folder.File.NodeInFile"
+                if (node as TydDocument == null)
+                {
+                    nodeKey += ".";
+                    nodeKey += node.Name != null ? node.Name : index.ToString();
+                }
+                _defs[nodeKey] = node;
+                InGameDebug.Log("<color=green>\t\t\tLoaded def: " + nodeKey + "</color>");
+
+                // Visit child nodes if this is a collection.
+                var table = node as TydTable;
+                if (table != null)
+                {
+                    for (int i = 0; i < table.Nodes.Count; i++)
+                    {
+                        AddNodeToAssetDatabase(nodeKey, table.Nodes[i], i);
+                    }
+                    return;
+                }
+                var list = node as TydList;
+                if (list != null)
+                {
+                    for (int i = 0; i < list.Nodes.Count; i++)
+                    {
+                        AddNodeToAssetDatabase(nodeKey, list.Nodes[i], i);
+                    }
+                    return;
+                }
+            }
+
+            // Adds a node to the Tyd inheritance list so we can do inheritance.
+            void AddNodeToInheritance(TydNode node)
+            {
+                if (node == null) return;
+
+                // Add to inheritance and visit child nodes if this is a collection.
+
+                var collection = node as TydCollection;
+                if (collection != null)
+                {
+                    Inheritance.Register(collection);
+                    for (int i = 0; i < collection.Nodes.Count; i++)
+                    {
+                        AddNodeToInheritance(collection[i]);
+                    }
+                }
+            }
+
+            // Merge files.
+            var mergedFiles = new Dictionary<string, string>();
+            var folders = new List<string>() { directory };
+            folders.AddRange(GetAllSubDirectories(directory));
+            foreach (var folder in folders)
+            {
+                InGameDebug.Log("\t\tSearching '" + folder + "'...");
+                foreach (var file in Directory.GetFiles(folder))
+                {
+                    InGameDebug.Log("\t\tFile found: '" + file + "'.");
+                    if (Path.GetExtension(file) == Constants.TydFileExtension)
+                    {
+                        var pathRelativeToDefsFolder =
+                            file
+                            .Replace(Constants.TydFileExtension, "")
+                            .Remove(0, directory.Length + 1);
+                        var key =
+                            pathRelativeToDefsFolder
+                            .Replace('\\', '.')
+                            .Replace('/', '.');
+                        InGameDebug.Log("<color=green>\t\tValid def file: '" + key + "' Adding nodes.</color>");
+
+                        if (!mergedFiles.ContainsKey(key))
+                        {
+                            mergedFiles[key] = "";
+                        }
+                        mergedFiles[key] += File.ReadAllText(file) + "\n";
+                    }
+                    else
+                    {
+                        InGameDebug.Log("\t\tInvalid extension: '" + Path.GetExtension(file) + "'. Skipping.");
                     }
                 }
             }

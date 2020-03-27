@@ -33,10 +33,26 @@ namespace Yeeter
             }
         }
 
+        protected bool _loadUpdateEachFrame = false;
+        public static bool LoadUpdateEachFrame
+        {
+            get => ActiveLuaManager._loadUpdateEachFrame;
+            set => ActiveLuaManager._loadUpdateEachFrame = value;
+        }
+
         /// <summary>
         /// Used so that stuff can be shared essentially.
         /// </summary>
         protected Script _globalScript;
+
+        public static void ReloadScripts()
+        {
+            InGameDebug.Log("OH EYAH YEAH ");
+            foreach (var luaObject in _objects.Values)
+            {
+                luaObject.Load(luaObject.Path);
+            }
+        }
 
         /// <summary>
         /// Sets up a LuaObjectComponent.

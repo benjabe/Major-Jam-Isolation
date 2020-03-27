@@ -12,6 +12,7 @@ public class CustomLuaManager : LuaManager
         InGameDebug.Log("OH YEAS");
         UserData.RegisterAssembly(typeof(CustomLuaManager).Assembly);
         script.Globals["FloorBuilder"] = new FloorBuilder();
+        script.Globals["CharacterBuilder"] = new CharacterBuilder();
         return script;
     }
 }

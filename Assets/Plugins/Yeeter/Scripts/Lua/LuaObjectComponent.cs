@@ -17,6 +17,7 @@ namespace Yeeter
         private Closure _update;
 
         public int Id { get; set; }
+        public string Path { get; private set; }
         public Script Script { get; set; }
         public Table Table { get; protected set; }
 
@@ -28,13 +29,14 @@ namespace Yeeter
             Table = Script.DoFile(path).Table;
             _start = Table.Get("Start").Function;
             _update = Table.Get("Update").Function;
+            Path = path;
         }
 
         private void Start()
         {
             if (_start == null)
             {
-                Debug.LogError(name + ": Start is null.", this);
+                Debug.LogError(name + ": Start is null. ", this);
             }
             if (_update == null)
             {
@@ -59,7 +61,16 @@ namespace Yeeter
             {
                 try
                 {
-                    Script.Call(_update, Table, Id, Time.deltaTime);
+                    if (LuaManager.LoadUpdateEachFrame)
+                    {
+                        var _table = Script.DoFile(Path).Table;
+                        _update = _table.Get("Update").Function;
+                        Script.Call(_update, _table, Id, Time.deltaTime);
+                    }
+                    else
+                    {
+                        Script.Call(_update, Table, Id, Time.deltaTime);
+                    }
                 }
                 catch (ScriptRuntimeException e)
                 {
@@ -75,7 +86,7 @@ namespace Yeeter
         /// <returns>The value associated with the key.</returns>
         public DynValue Get(string key)
         {
-            return Script.Globals.Get(key);
+            return Table.Get(key);
         }
 
         /// <summary>
@@ -84,7 +95,7 @@ namespace Yeeter
         /// <returns>The pairs in the table.</returns>
         public IEnumerable<TablePair> GetTablePairs()
         {
-            return Script.Globals.Pairs;
+            return Table.Pairs;
         }
     }
 }

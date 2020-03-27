@@ -21,7 +21,7 @@ public class TileType
         }
         var texture = StreamingAssetsDatabase.GetTexture("Tiles." + tileType.Name);
         tileType.Sprite = Sprite.Create(
-            texture, new Rect(0, 0, 16, 16), new Vector2(0, 0), 16
+            texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0), texture.width
         );
         return tileType;
     }

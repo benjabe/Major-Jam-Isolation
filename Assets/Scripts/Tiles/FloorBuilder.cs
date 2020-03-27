@@ -36,6 +36,14 @@ public class FloorBuilder
     {
         Floor.CurrentFloor.PlaceTile(_tileTypes[typeName], x, y);
     }
+    public static void PlaceCharacter(string typeName, int x, int y)
+    {
+        int id = CharacterBuilder.Create(typeName);
+        var go = ObjectBuilder.Get(id);
+        ObjectBuilder.SetPosition(id, x, y);
+        Character character = go.GetComponent<Character>();
+        Floor.CurrentFloor.AddCharacter(character);
+    }
 
     public void PositionCameraAtEntry()
     {
