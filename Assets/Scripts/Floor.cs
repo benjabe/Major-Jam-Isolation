@@ -53,5 +53,6 @@ public class Floor : MonoBehaviour
             DestroyImmediate(character.gameObject);
         }
         _tiles = new Dictionary<Vector2Int, Tile>();
+        _characters = new List<Character>();
     }
 }
