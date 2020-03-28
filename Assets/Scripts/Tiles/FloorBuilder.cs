@@ -11,6 +11,8 @@ public class FloorBuilder
     private static Camera _mainCamera;
     private static Dictionary<string, TileType> _tileTypes;
 
+    public static Floor CurrentFloor { get => Floor.CurrentFloor; }
+
     public static void LoadTileTypes()
     {
         _tileTypes = new Dictionary<string, TileType>();
@@ -60,5 +62,28 @@ public class FloorBuilder
     public void ClearFloor()
     {
         Floor.CurrentFloor.Clear();
+    }
+
+    public void PlacePlayer()
+    {
+        int id = CharacterBuilder.Create(CharacterBuilder.RandomType().FullName);
+        var go = ObjectBuilder.Get(id);
+        var entryPosition = Floor.CurrentFloor.Entry.transform.position;
+        ObjectBuilder.SetPosition(id, entryPosition.x, entryPosition.y);
+        Character character = go.GetComponent<Character>();
+        go.AddComponent<PlayerController>();
+        Floor.CurrentFloor.AddCharacter(character);
+        Player.Character = character;
+    }
+
+    public bool IsCharacterAtTraversableTile(int id)
+    {
+        var position = ObjectBuilder.Get(id).transform.position;
+        return IsTileTraversable((int)position.x, (int)position.y);
+    }
+
+    public bool IsTileTraversable(int x, int y)
+    {
+        return Floor.CurrentFloor.IsTileTraversable(x, y);
     }
 }

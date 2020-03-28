@@ -1,5 +1,6 @@
 ﻿using MoonSharp.Interpreter;
 using MoonSharp.Interpreter.Loaders;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,6 +21,7 @@ namespace Yeeter
         /// The active LuaManager is the lua manager that we use to execute scripts and build lua objects.
         /// </summary>
         public static LuaManager ActiveLuaManager { get; set; } = new LuaManager();
+        public static Action<LuaObjectComponent> OnLuaObjectSetUp { get; set; }
 
         public static Script GlobalScript
         {
@@ -32,8 +34,6 @@ namespace Yeeter
                 return ActiveLuaManager._globalScript;
             }
         }
-
-        protected bool _loadUpdateEachFrame = false;
         public static bool LoadUpdateEachFrame
         {
             get => ActiveLuaManager._loadUpdateEachFrame;
@@ -44,6 +44,7 @@ namespace Yeeter
         /// Used so that stuff can be shared essentially.
         /// </summary>
         protected Script _globalScript;
+        protected bool _loadUpdateEachFrame = false;
 
         public static void ReloadScripts()
         {
@@ -64,6 +65,7 @@ namespace Yeeter
             luaObject.Id = ObjectBuilder.GetId(luaObject.gameObject);
             _objects.Add(luaObject.Id, luaObject);
             luaObject.Script = GlobalScript;
+            OnLuaObjectSetUp?.Invoke(luaObject);
         }
 
         /// <summary>

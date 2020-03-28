@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    private TileType _type;
+    public TileType Type { get; set; }
     private void Awake()
     {
         

@@ -28,7 +28,8 @@ namespace Yeeter
         }
         private void Awake()
         {
-            _console = ObjectBuilder.Get((int)UI.Create("Console").Number);
+            int consoleId = (int)UI.Create("Console").Number;
+            _console = ObjectBuilder.Get(consoleId);
             _console.SetActive(false);
         }
 

@@ -1,5 +1,8 @@
-﻿using Tyd;
+﻿using MoonSharp.Interpreter;
+using Tyd;
+using UnityEngine.Scripting;
 
+[Preserve, MoonSharpUserData]
 public class CharacterType
 {
     public string Symbol { get; private set; }

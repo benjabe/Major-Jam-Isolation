@@ -7,7 +7,8 @@ function floor:Start(id)
     end)
     -- generate the floor
     floor:Generate(id)
-
+    -- add a tick to the floor so that we can have ticked behaviours
+    ObjectBuilder.Instantiate("Tick")
 end
 
 function floor:Update(id, dt)
@@ -76,15 +77,19 @@ function floor:Generate(id)
     -- place the exit and entry
     FloorBuilder.PlaceTile("Entry", entry.x, entry.y)
     FloorBuilder.PlaceTile("Exit", exit.x, exit.y)
-    FloorBuilder.PositionCameraAtEntry()
 
     -- place a couple of characters around the level on random floor tile positions
     -- todo: select a random type of character from a level-floor def/.tyd file
     local characterCount = math.random(1, 4)
     for i = 1, characterCount do
         local pos = floorTilePositions[math.random(#floorTilePositions)]
-        local character = FloorBuilder.PlaceCharacter("At", pos.x, pos.y)
+        FloorBuilder.PlaceCharacter("At", pos.x, pos.y)
     end
+    -- place him player boi at entrance
+    FloorBuilder.PlacePlayer()
+    -- enable dungeon control scheme
+    BBInput.SetActiveProfile("Dungeon")
+    ObjectBuilder.Instantiate("PlayerFollowCamera")
 end
 
 function table.contains(table, element)

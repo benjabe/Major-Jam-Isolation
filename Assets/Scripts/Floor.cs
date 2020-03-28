@@ -34,6 +34,7 @@ public class Floor : MonoBehaviour
         go.AddComponent<SpriteRenderer>().sprite = type.Sprite;
         go.name = x + "_" + y + "_" + type.Name;
         _tiles[vec] = go.AddComponent<Tile>();
+        _tiles[vec].Type = type;
         if (type.Name == "Entry") Entry = go.GetComponent<Tile>();
     }
 
@@ -54,5 +55,10 @@ public class Floor : MonoBehaviour
         }
         _tiles = new Dictionary<Vector2Int, Tile>();
         _characters = new List<Character>();
+    }
+
+    public bool IsTileTraversable(int x, int y)
+    {
+        return _tiles[new Vector2Int(x, y)].Type.Traversable;
     }
 }
