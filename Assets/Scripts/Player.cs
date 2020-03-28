@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using MoonSharp.Interpreter;
+using UnityEngine.Scripting;
 
+[Preserve, MoonSharpUserData]
 public class Player
 {
     public static Character Character { get; set; }

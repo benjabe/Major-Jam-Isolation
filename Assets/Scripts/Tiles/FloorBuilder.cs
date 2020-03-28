@@ -47,24 +47,24 @@ public class FloorBuilder
         Floor.CurrentFloor.AddCharacter(character);
     }
 
-    public void PositionCameraAtEntry()
+    public static void PositionCameraAtEntry()
     {
         if (Floor.CurrentFloor.Entry == null)
         {
             InGameDebug.Log(
-                "<color=red>" + GetType().Name + ".PositionCameraAtEntry(): Current floor has no entry.</color>");
+                "<color=red>" + "FloorBuilder.PositionCameraAtEntry(): Current floor has no entry.</color>");
         }
         if (_mainCamera == null) _mainCamera = Camera.main;
         _mainCamera.transform.position =
             Floor.CurrentFloor.Entry.transform.position + Vector3.forward * _mainCamera.transform.position.z;
     }
 
-    public void ClearFloor()
+    public static void ClearFloor()
     {
         Floor.CurrentFloor.Clear();
     }
 
-    public void PlacePlayer()
+    public static void PlacePlayer()
     {
         int id = CharacterBuilder.Create(CharacterBuilder.RandomType().FullName);
         var go = ObjectBuilder.Get(id);
@@ -76,13 +76,13 @@ public class FloorBuilder
         Player.Character = character;
     }
 
-    public bool IsCharacterAtTraversableTile(int id)
+    public static bool IsCharacterAtTraversableTile(int id)
     {
         var position = ObjectBuilder.Get(id).transform.position;
         return IsTileTraversable((int)position.x, (int)position.y);
     }
 
-    public bool IsTileTraversable(int x, int y)
+    public static bool IsTileTraversable(int x, int y)
     {
         return Floor.CurrentFloor.IsTileTraversable(x, y);
     }

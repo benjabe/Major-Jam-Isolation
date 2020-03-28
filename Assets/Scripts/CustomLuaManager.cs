@@ -10,6 +10,7 @@ public class CustomLuaManager : LuaManager
         script.Globals["FloorBuilder"] = new FloorBuilder();
         script.Globals["CharacterBuilder"] = new CharacterBuilder();
         script.Globals["TickerUtility"] = new TickerUtility();
+        script.Globals["Player"] = new Player();
         return script;
     }
 }

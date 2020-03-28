@@ -15,6 +15,8 @@ namespace Yeeter
     [Preserve, MoonSharpUserData]
     public class LuaManager
     {
+        public static Dictionary<int, Dictionary<string, Action<DynValue>>> _onValueSet { get; set; }
+            = new Dictionary<int, Dictionary<string, Action<DynValue>>>();
         protected static Dictionary<int, LuaObjectComponent> _objects = new Dictionary<int, LuaObjectComponent>();
 
         /// <summary>
@@ -66,6 +68,51 @@ namespace Yeeter
             _objects.Add(luaObject.Id, luaObject);
             luaObject.Script = GlobalScript;
             OnLuaObjectSetUp?.Invoke(luaObject);
+        }
+
+        /// <summary>
+        /// Adds an action to be performed when a value is a associated with a given key for a
+        /// LuaObject with a given id.
+        /// </summary>
+        /// <param name="id">The LuaObject id.</param>
+        /// <param name="key">The key to listen to.</param>
+        /// <param name="action">The action to perform when the value is set.</param>
+        public static void AddOnValueSetListener(int id, string key, Action<DynValue> action)
+        {
+            if (!_onValueSet.ContainsKey(id))
+            {
+                _onValueSet.Add(id, new Dictionary<string, Action<DynValue>>());
+            }
+            if (!_onValueSet[id].ContainsKey(key))
+            {
+                _onValueSet[id].Add(key, action);
+            }
+            else
+            {
+                _onValueSet[id][key] += action;
+            }
+        }
+        /// <summary>
+        /// Adds an action to be performed when a value is a associated with a given key for a
+        /// LuaObject with a given id.
+        /// </summary>
+        /// <param name="id">The LuaObject id.</param>
+        /// <param name="key">The key to listen to.</param>
+        /// <param name="action">The action to perform when the value is set.</param>
+        public static void AddOnValueSetListener(int id, string key, DynValue action)
+        {
+            if (!_onValueSet.ContainsKey(id))
+            {
+                _onValueSet.Add(id, new Dictionary<string, Action<DynValue>>());
+            }
+            if (!_onValueSet[id].ContainsKey(key))
+            {
+                _onValueSet[id].Add(key, v => Call(action, v));
+            }
+            else
+            {
+                _onValueSet[id][key] += v => Call(action, v);
+            }
         }
 
         /// <summary>

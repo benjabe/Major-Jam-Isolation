@@ -6,10 +6,12 @@ function player:Start(id)
     BBInput.AddOnAxisPressed("MoveLeft", function() player:Move(id, -1, 0) end)
     BBInput.AddOnAxisPressed("MoveRight", function() player:Move(id, 1, 0) end)
 
-    BBInput.AddOnAxisPressed("FaceUp", function() player:Attack(id, 0, 1) end)
-    BBInput.AddOnAxisPressed("FaceDown", function() player:Attack(id, 0, -1) end)
-    BBInput.AddOnAxisPressed("FaceLeft", function() player:Attack(id, -1, 0) end)
-    BBInput.AddOnAxisPressed("FaceRight", function() player:Atack(id, 1, 0) end)
+    BBInput.AddOnAxisPressed("FaceUp", function() player:Face(id, 0, 1) end)
+    BBInput.AddOnAxisPressed("FaceDown", function() player:Face(id, 0, -1) end)
+    BBInput.AddOnAxisPressed("FaceLeft", function() player:Face(id, -1, 0) end)
+    BBInput.AddOnAxisPressed("FaceRight", function() player:Face(id, 1, 0) end)
+
+    BBInput.AddOnAxisPressed("Attack", function() player:Attack(id) end)
 
     BBInput.AddOnAxisPressed("Wait", TickerUtility.Tick)
 end
@@ -18,15 +20,18 @@ function player:Update(id, dt)
 end
 
 function player:Move(id, x, y)
-    ObjectBuilder.Translate(id, x, y)
-    if not FloorBuilder.IsCharacterAtTraversableTile(id) then
-        ObjectBuilder.Translate(id, -x, -y)
-    end
+    Player.Character.Move(x, y)
+    player:Face(id, x, y)
     TickerUtility.Tick()
 end
 
-function player:Attack(id, x, y)
-    
+function player:Face(id, x, y)
+    Player.Character.SetFacing(x, y)
+end
+
+function player:Attack(id)
+    Player.Character.Attack()
+    TickerUtility.Tick()
 end
 
 return player

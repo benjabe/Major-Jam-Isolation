@@ -61,4 +61,16 @@ public class Floor : MonoBehaviour
     {
         return _tiles[new Vector2Int(x, y)].Type.Traversable;
     }
+
+    public Character FindCharacterAtPosition(int x, int y)
+    {
+        foreach (var character in _characters)
+        {
+            if (character.Position.x == x && character.Position.y == y)
+            {
+                return character;
+            }
+        }
+        return null;
+    }
 }

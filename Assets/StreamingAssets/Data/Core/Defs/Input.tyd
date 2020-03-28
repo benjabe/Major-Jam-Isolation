@@ -48,30 +48,60 @@ Profiles
                 name            MoveUp
                 label           moveUp
                 description     Moves the player character up.
-                keyCodes        [[W]; [UpArrow]]
+                keyCodes        [[W]]
             }
             {
                 name            MoveDown
                 label           moveDown
                 description     Moves the player character down.
-                keyCodes        [[S]; [DownArrow]]
+                keyCodes        [[S]]
             }
             {
                 name            MoveLeft
                 label           moveLeft
                 description     Moves the player character left.
-                keyCodes        [[A]; [LeftArrow]]
+                keyCodes        [[A]]
             }
             {
                 name            MoveRight
                 label           moveRight
                 description     Moves the player character right.
-                keyCodes        [[D]; [RightArrow]]
+                keyCodes        [[D]]
+            }
+            {
+                name            FaceUp
+                label           moveUp
+                description     Moves the player character up.
+                keyCodes        [[UpArrow]]
+            }
+            {
+                name            FaceDown
+                label           moveDown
+                description     Moves the player character down.
+                keyCodes        [[DownArrow]]
+            }
+            {
+                name            FaceLeft
+                label           moveLeft
+                description     Moves the player character left.
+                keyCodes        [[LeftArrow]]
+            }
+            {
+                name            FaceRight
+                label           moveRight
+                description     Moves the player character right.
+                keyCodes        [[RightArrow]]
             }
             {
                 name            Wait
                 label           wait
                 description     Do nothing for one tick.
+                keyCodes        [[Q]]
+            }
+            {
+                name            Attack
+                label           attack
+                description     Attack in the facing direction (if the attack has a direction).
                 keyCodes        [[Space]]
             }
             {
