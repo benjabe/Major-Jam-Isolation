@@ -149,4 +149,33 @@ Profiles
             }
         ]
     }
+    Dialogue
+    {
+        name        Dialogue
+        enabled     false
+        Axes
+        [
+            {
+                name            ContinueDialogue
+                label           continueDialogue
+                description     Continues dialogue.
+                priority        10
+                keyCodes        [[Space]; [Return]]
+            }
+            {
+                name            DialogueOptionMoveUp
+                label           dialougeOptionMoveUp
+                description     Move up in the dialogue option menu.
+                priority        10 
+                keycodes        [[W]; [UpArrow]]
+            }
+            {
+                name            DialogueOptionMoveDown
+                label           dialougeOptionMoveDown
+                description     Move down in the dialogue option menu.
+                priority        10 
+                keycodes        [[S]; [DownArrow]]
+            }
+        ]
+    }
 }

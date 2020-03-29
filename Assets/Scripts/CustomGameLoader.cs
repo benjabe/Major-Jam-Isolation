@@ -87,9 +87,14 @@ namespace Yeeter
                     Step = 7;
                     return;
                 case 7:
+                    _text.text = "Loading dialogue...";
+                    StreamingAssetsDatabase.LoadDialogueFromActiveModules();
+                    Step = 8;
+                    return;
+                case 8:
                     SoundManager.Initialize();
                     _text.text = "Loading Main Menu...";
-                    Step = 8;
+                    Step = 9;
                     if (SceneManager.sceneCountInBuildSettings > 1)
                     {
                         SceneManager.LoadScene(1);
@@ -103,7 +108,7 @@ namespace Yeeter
                             "If it is not already, the loading scene should also be added with build index 0.");
                     }
                     return;
-                case 8:
+                case 9:
                     //_loadingProgressBar.GetComponent<Image>().color = new Color(0.9f, 0.2f, 0.3f);
                     _text.text = "Well, this is awkward.\nIt seems the main menu is missing.\nSee console for info.";
                     _console.SetActive(true);
