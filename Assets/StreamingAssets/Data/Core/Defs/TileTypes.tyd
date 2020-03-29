@@ -1,16 +1,32 @@
 Wall
 {
-    traversable     false
+    texture         Tiles.Wall_TopHalf
+    Properties
+    [
+    ]
 }
 Floor
 {
-    traversable     true
+    texture     Tiles.Floor
+    Properties
+    [
+        Traversable
+    ]
 }
-Entry
+Entry # remove this? doesn't serve a purpose.
 {
-    traversable     true
+    texture     Tiles.Entry
+    Properties
+    [
+        Traversable
+    ]
 }
 Exit
 {
-    traversable     true
+    texture     Tiles.Exit
+    Properties
+    [
+        Traversable
+        Exit
+    ]
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Tyd;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Scripting;
 using Yeeter;
 
@@ -24,6 +25,13 @@ public class FloorBuilder
         }
     }
 
+    public static void NextFloor()
+    {
+        CurrentFloor.Clear();
+        BBInput.ClearAllAxesInProfile("Dungeon");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
     public static void SetTileTypeToPlaceOnMouseClick(string typeName)
     {
         var type = GetTileTypeWithName(typeName);
@@ -38,12 +46,19 @@ public class FloorBuilder
     {
         Floor.CurrentFloor.PlaceTile(_tileTypes[typeName], x, y);
     }
-    public static void PlaceCharacter(string typeName, int x, int y)
+
+    public Tile GetTile(int x, int y)
+    {
+        return CurrentFloor.GetTile(x, y);
+    }
+
+    public static void PlaceEnemy(string typeName, int x, int y)
     {
         int id = CharacterBuilder.Create(typeName);
         var go = ObjectBuilder.Get(id);
         ObjectBuilder.SetPosition(id, x, y);
         Character character = go.GetComponent<Character>();
+        ObjectBuilder.AddLuaObjectComponent(id, "Enemy");
         Floor.CurrentFloor.AddCharacter(character);
     }
 
@@ -66,14 +81,21 @@ public class FloorBuilder
 
     public static void PlacePlayer()
     {
-        int id = CharacterBuilder.Create(CharacterBuilder.RandomType().FullName);
-        var go = ObjectBuilder.Get(id);
         var entryPosition = Floor.CurrentFloor.Entry.transform.position;
-        ObjectBuilder.SetPosition(id, entryPosition.x, entryPosition.y);
-        Character character = go.GetComponent<Character>();
-        go.AddComponent<PlayerController>();
-        Floor.CurrentFloor.AddCharacter(character);
-        Player.Character = character;
+        if (Player.Character == null)
+        {
+            int id = CharacterBuilder.Create(CharacterBuilder.RandomType().FullName);
+            var go = ObjectBuilder.Get(id);
+            ObjectBuilder.SetPosition(id, entryPosition.x, entryPosition.y);
+            Character character = go.GetComponent<Character>();
+            go.AddComponent<PlayerController>();
+            Floor.CurrentFloor.AddCharacter(character);
+            Player.Character = character;
+        }
+        else
+        {
+            Player.Character.SetPosition(Mathf.RoundToInt(entryPosition.x), Mathf.RoundToInt(entryPosition.y));
+        }
     }
 
     public static bool IsCharacterAtTraversableTile(int id)
@@ -84,6 +106,29 @@ public class FloorBuilder
 
     public static bool IsTileTraversable(int x, int y)
     {
-        return Floor.CurrentFloor.IsTileTraversable(x, y);
+        return CurrentFloor.IsTileTraversable(x, y);
+    }
+
+    public static Character FindCharacterWithId(int id)
+    {
+        return CurrentFloor.FindCharacterWithId(id);
+    }
+
+    public static void BuildTileGraph()
+    {
+        CurrentFloor.BuildTileGraph();
+    }
+    public static void VisualizeTileGraph()
+    {
+        CurrentFloor.VisualizeTileGraph();
+    }
+
+    public List<Node<Tile>> FindPath(int startX, int startY, int goalX, int goalY)
+    {
+        return CurrentFloor.FindPath(startX, startY, goalX, goalY);
+    }
+    public List<Vector2Int> FindPathPositions(int startX, int startY, int goalX, int goalY)
+    {
+        return CurrentFloor.FindPathPositions(startX, startY, goalX, goalY);
     }
 }

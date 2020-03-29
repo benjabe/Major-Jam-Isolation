@@ -1,6 +1,9 @@
 local floor = {}
 
 function floor:Start(id)
+    -- set up ui
+    floor:CreateUI(id)
+
     -- hotkey to generate a new floor
     BBInput.AddOnAxisPressed("RemakeFloor", function()
         floor:Generate(id)
@@ -12,6 +15,61 @@ function floor:Start(id)
 end
 
 function floor:Update(id, dt)
+end
+
+function floor:CreateUI(id)
+    local font = "Kenney Blocks"
+    local fontSize = 16
+    --local uiBottom = UI.Create("EmptyStretchAll")
+    local uiMiddle = UI.Create("EmptyStretchAll")
+
+    -- create console so we can cheat
+    local uiTop = UI.Create("EmptyStretchAll")
+    local console = UI.Create("Console")
+    UI.SetParent(console, uiTop)
+
+    -- display floor name
+    local floorName = "B1F"
+    local floorNameText = UI.Create("Text")
+    UI.SetText(floorNameText, floorName)
+    UI.SetAnchors(floorNameText, 0, 1, 0, 1)
+    UI.SetPivot(floorNameText, 0, 1)
+    UI.SetPosition(floorNameText, 10, 0)
+    UI.SetFont(floorNameText, font)
+    UI.SetFontSize(floorNameText, fontSize)
+    UI.SetParent(floorNameText, uiMiddle)
+    UI.SetTextColor(floorNameText, 255, 255, 255, 255)
+    
+    local levelText = UI.Create("Text")
+    UI.SetText(levelText, "Lv1")
+    UI.SetAnchors(levelText, 0, 1, 0, 1)
+    UI.SetPivot(levelText, 0, 1)
+    UI.SetPosition(levelText, 70, 0)
+    UI.SetFont(levelText, font)
+    UI.SetFontSize(levelText, fontSize)
+    UI.SetParent(levelText, uiMiddle)
+    UI.SetTextColor(levelText, 255, 255, 255, 255)
+
+    -- display player level
+    local hpText = UI.Create("Text")
+    local onHealthSet = 
+    Player.AddOnHealthSetListener(function(health)
+        -- todo: remove this
+        if ObjectBuilder.Get(hpText) ~= nil then
+            UI.SetText(hpText, "HP"..health.."/1000")
+        end
+    end)
+    UI.SetAnchors(hpText, 0, 1, 0, 1)
+    UI.SetPivot(hpText, 0, 1)
+    UI.SetPosition(hpText, 130, 0)
+    UI.SetFont(hpText, font)
+    UI.SetFontSize(hpText, fontSize)
+    UI.SetParent(hpText, uiMiddle)
+    UI.SetTextColor(hpText, 255, 255, 255, 255)
+
+    -- display player hp
+    --   numbers
+    --   bar
 end
 
 function floor:Generate(id)
@@ -83,13 +141,14 @@ function floor:Generate(id)
     local characterCount = math.random(1, 4)
     for i = 1, characterCount do
         local pos = floorTilePositions[math.random(#floorTilePositions)]
-        FloorBuilder.PlaceCharacter("At", pos.x, pos.y)
+        FloorBuilder.PlaceEnemy("At", pos.x, pos.y)
     end
     -- place him player boi at entrance
     FloorBuilder.PlacePlayer()
     -- enable dungeon control scheme
     BBInput.SetActiveProfile("Dungeon")
     ObjectBuilder.Instantiate("PlayerFollowCamera")
+    FloorBuilder.BuildTileGraph()
 end
 
 function table.contains(table, element)

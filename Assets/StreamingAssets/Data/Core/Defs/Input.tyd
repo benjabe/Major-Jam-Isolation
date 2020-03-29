@@ -44,6 +44,7 @@ Profiles
         alwaysEnabled   false
         Axes
         [
+            #   Movement
             {
                 name            MoveUp
                 label           moveUp
@@ -69,6 +70,19 @@ Profiles
                 keyCodes        [[D]]
             }
             {
+                name            Run
+                label           run
+                description     Moves until an obstacle is hit.
+                keyCodes        [[LeftShift]; [RightShift]]
+            }
+            {
+                name            MoveInFacingDirection
+                label           MoveInFacingDirection
+                description     Moves the player character in the facing direction.
+                keyCodes        [[Q]]
+            }
+            # Facing
+            {
                 name            FaceUp
                 label           moveUp
                 description     Moves the player character up.
@@ -92,6 +106,7 @@ Profiles
                 description     Moves the player character right.
                 keyCodes        [[RightArrow]]
             }
+            # Misc. dungeon stuff
             {
                 name            Wait
                 label           wait
@@ -103,18 +118,6 @@ Profiles
                 label           attack
                 description     Attack in the facing direction (if the attack has a direction).
                 keyCodes        [[Space]]
-            }
-            {
-                name            AttackInMoveDirection
-                label           attackInMoveDirection
-                description     Causes the player character to attack in the direction you would have moved if you didn't hold down this button.
-                keyCodes        [[LeftAlt]; [RightAlt]]
-            }
-            {
-                name            MoveUntilObstacleIsHit
-                label           moveUntilObstacleIsHit
-                description     Moves until an obstacle is hit.
-                keyCodes        [[LeftShift]; [RightShift]]
             }
         ]
 
